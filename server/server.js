@@ -29,7 +29,7 @@ app.use(express.json({ limit: "1mb" }));
 if (process.env.NODE_ENV !== "production") app.use(morgan("dev"));
 
 app.get("/", (_req, res) =>
-  res.json({ status: "ok", success: false, messsage: "server is running " }),
+  res.json({ status: "ok", success: true, messsage: "server is running " }),
 );
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);

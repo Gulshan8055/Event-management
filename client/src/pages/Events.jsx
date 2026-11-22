@@ -17,7 +17,7 @@ export default function Events() {
   useEffect(() => {
     setLoading(true);
     api.get('/events', { params: { q, category, when, page, limit: 9 } })
-      .then((r) => setData(r.data))
+      .then((r) => setData({events:[],pages:1,categories:[],...r.data}))
       .finally(() => setLoading(false));
   }, [q, category, when, page]);
 

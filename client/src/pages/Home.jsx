@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
@@ -6,13 +7,24 @@ import EventCard from "../components/EventCard.jsx";
 export default function Home() {
   const [events, setEvents] = useState([]);
   const [q, setQ] = useState("");
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     api
       .get("/events", { params: { limit: 6 } })
-      .then((r) => setEvents(r.data.events) || [])
-      .catch(() => {});
+      .then((r) => {
+        const eventList = Array.isArray(r.data?.events)
+          ? r.data.events
+          : [];
+
+        setEvents(eventList);
+      })
+      .catch((error) => {
+        console.error("Home events error:", error);
+        setEvents([]);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const search = (e) => {
@@ -25,9 +37,10 @@ export default function Home() {
       <section className="hero">
         <h1>Find something worth leaving the house for.</h1>
         <p>
-          Concerts, workshops, runs and meetups near you. Reserve a seat in
-          under a minute, or host your own.
+          Concerts, workshops, runs and meetups near you.
+          Reserve a seat in under a minute, or host your own.
         </p>
+
         <form onSubmit={search} className="search">
           <input
             value={q}
@@ -44,12 +57,12 @@ export default function Home() {
           <h2>Coming up</h2>
           <Link to="/events">See all events</Link>
         </div>
-        {events.length === 0 ? (
+
+        {loading ? (
+          <p className="muted">Loading events...</p>
+        ) : events.length === 0 ? (
           <div className="empty">
-            <p>
-              No upcoming events yet. Run <code>npm run seed</code> to add
-              sample events.
-            </p>
+            <p>No upcoming events yet.</p>
           </div>
         ) : (
           <div className="grid">
@@ -63,8 +76,8 @@ export default function Home() {
       <section className="cta">
         <h2>Hosting something?</h2>
         <p>
-          Create an organizer account to publish events, set capacity and see
-          who is coming.
+          Create an organizer account to publish events,
+          set capacity and see who is coming.
         </p>
         <Link className="btn accent" to="/register">
           Create organizer account

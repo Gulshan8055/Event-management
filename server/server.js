@@ -17,7 +17,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use(
   helmet({ crossOriginResourcePolicy: false, contentSecurityPolicy: false }),
 );
-app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173" }));
+app.use(
+  cors({
+    origin:
+      process.env.CLIENT_URL ||
+      "http://localhost:5173" ||
+      "https://event-management-backend-1lmz.onrender.com",
+  }),
+);
 app.use(express.json({ limit: "1mb" }));
 if (process.env.NODE_ENV !== "production") app.use(morgan("dev"));
 

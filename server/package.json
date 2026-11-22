@@ -1,5 +1,5 @@
 {
-  "name": "Event-management",
+  "name": "Gatherly-Event",
   "version": "1.0.0",
   "type": "module",
   "main": "server.js",
